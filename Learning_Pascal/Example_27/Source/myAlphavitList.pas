@@ -17,7 +17,7 @@ Implementation
 Uses myAlphavitQueue;
 Var pHead, pTail: listPoint;
 
-Function isEmpty(pHead:listPoint):boolean;//проверка - список пустой
+Function isEmpty(pHead:listPoint):boolean;//проверка - пустой ли указатель
 begin
     isEmpty:=pHead = nil;
 end;

@@ -17,6 +17,7 @@ Type wordLength = 1..Integer.MaxValue;
 Var i:integer;
     pTail,pHead: listPoint;
     wordQueue: queueArray;
+    nonWordQueue: queuePoint;
 
 Procedure inputList();//Ввод списка
 var i,n:integer;
@@ -38,7 +39,7 @@ begin
     InputList();
 end;
 
-Procedure initWordQueue();// инициализация очередей (их указателей);
+Procedure initQueue();// инициализация очередей (их указателей);
 var i:element;
 begin
     for i:=MIN_ELEMENT to MAX_ELEMENT do
@@ -79,7 +80,8 @@ begin
         str:=myAlphavitList.getWord(pHead);
         If isContainIndex(str, i) then begin
             If isAlphavitElement(str, i) then myAlphavitQueue.add(wordQueue[str[i]], str);
-        end;
+        end
+        else myAlphavitQueue.add(nonWordQueue, str);
         pHead:=pHead^.next;
     end;
 end;
@@ -88,6 +90,8 @@ Procedure unionQueues();//объединение очередей
 var c:element;
 begin
     myAlphavitList.cleanList(pHead);
+    myAlphavitList.addQueue(nonWordQueue);
+    myAlphavitQueue.cleanQueue(nonWordQueue);
     for c:=MIN_ELEMENT to MAX_ELEMENT do
         myAlphavitList.addQueue(wordQueue[c]);
         myAlphavitQueue.cleanQueue(wordQueue[c]);
@@ -96,7 +100,7 @@ end;
 Procedure sortRealization(i:integer);//процедура реализации сортировки
 begin
     if isExistElement(i) then begin
-        initWordQueue();
+        initQueue();
         fillQueues(i);
         unionQueues();
         i -= 1;
