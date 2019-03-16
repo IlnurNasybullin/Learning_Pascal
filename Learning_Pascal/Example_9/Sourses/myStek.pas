@@ -44,8 +44,6 @@ begin
     end;
 end;
 
-
-
 Procedure pop(var point:stekPoint);
 var metk:stekPoint;
 begin
@@ -59,6 +57,11 @@ begin
     end;
 end;
 
-Initialization
+Procedure initOpenPosition();
+begin
+    openPosition:=0;
+end;
 
+Initialization
+    initOpenPosition();
 End.

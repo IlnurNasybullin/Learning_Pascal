@@ -65,6 +65,24 @@ begin
     isCloseBracket:= (symb = CLOSE_ROUND_BRACKET) or (symb = CLOSE_SQUARE_BRACKET);
 end;
 
+Procedure fillBrackets(symb:element);
+begin
+    if symb = OPEN_ROUND_BRACKET then add(openRoundBracketStek,position);
+    if symb = OPEN_SQUARE_BRACKET then add(openSquareBracketStek,position);
+    if symb = CLOSE_ROUND_BRACKET then pop(openRoundBracketStek);
+    if symb = CLOSE_SQUARE_BRACKET then pop(openSquareBracketStek);
+end;
+
+Function getOpenPosition():integer;
+begin
+    getOpenPosition:=openPosition;
+end;
+
+Function isFalseBrackets(f:text):boolean;
+begin
+    isFalseBrackets:=(not Eof(f) and emptyStek()) or (Eof(f) and (getOpenPosition() = 0));
+end;
+
 Procedure getDates();
 begin
     initDates();
@@ -75,15 +93,12 @@ begin
     position:=1;
     While not Eof(f) and not emptyStek() do begin
         symb := getSymb(f);
-        if symb = OPEN_ROUND_BRACKET then add(openRoundBracketStek,position);
-        if symb = OPEN_SQUARE_BRACKET then add(openSquareBracketStek,position);
-        if symb = CLOSE_ROUND_BRACKET then pop(openRoundBracketStek);
-        if symb = CLOSE_SQUARE_BRACKET then pop(openSquareBracketStek);
+        fillBrackets(symb);
         setCollisionPosition(symb,openPosition);
         if isCloseBracket(symb) and not emptyStek() then Write(openPosition,' ',position,' ');
         position+=1;
     end;
-    if not Eof(f) and emptyStek() then getException();
+    if isFalseBrackets(f) then getException();
     Close(f);
 end;
 
