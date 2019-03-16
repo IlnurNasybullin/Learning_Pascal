@@ -28,9 +28,15 @@ begin
     openPosition:=position;
 end;
 
+Procedure initOpenPosition();
+begin
+    openPosition:=0;
+end;
+
 Procedure add(var point:stekPoint;i:integer);
 var y:stekPoint;
 begin
+    initOpenPosition();
     new(y);
     if isEmpty(point) then begin
         y^.info:=i;
@@ -47,6 +53,7 @@ end;
 Procedure pop(var point:stekPoint);
 var metk:stekPoint;
 begin
+    initOpenPosition();
     If isEmpty(point) then empty := true
     else begin
         metk:=point^.next;
@@ -57,11 +64,6 @@ begin
     end;
 end;
 
-Procedure initOpenPosition();
-begin
-    openPosition:=0;
-end;
-
 Initialization
-    initOpenPosition();
+    
 End.

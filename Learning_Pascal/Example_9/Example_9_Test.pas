@@ -94,9 +94,8 @@ begin
     While not Eof(f) and not emptyStek() do begin
         symb := getSymb(f);
         fillBrackets(symb);
-        setCollisionPosition(symb,openPosition);
+        setCollisionPosition(symb,getOpenPosition());
         if isCloseBracket(symb) and not emptyStek() then Write(openPosition,' ',position,' ');
-        //WriteLn(emptyStek());
         position+=1;
     end;
     if isFalseBrackets(f) then getException();
