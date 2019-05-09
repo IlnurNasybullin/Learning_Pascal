@@ -13,7 +13,7 @@ Implementation
 Var edgeSetHead:pointEdgeSet;
     edgeSubsetHead:pointEdgeSet;
 
-Procedure initEdgeSet();
+Procedure initEdgeSet();//инициализация множества и подмножества
 begin
     new(edgeSetHead);
     edgeSetHead^.next:=edgeSetHead;
@@ -22,7 +22,7 @@ begin
     edgeSubsetHead^.next:=edgeSubsetHead;
 end;
 
-Procedure addEdgeSet(edge:pointEdge);
+Procedure addEdgeSet(edge:pointEdge);//добвление ребра из списка в множество рёбер
 var edgeSet:pointEdgeSet;
 begin
     new(edgeSet);
@@ -33,7 +33,7 @@ begin
     edgeSetHead:=edgeSet;
 end;
 
-Procedure addEdgeSubset(edgeSet:pointEdgeSet);
+Procedure addEdgeSubset(edgeSet:pointEdgeSet);//дабвление указателя в подмножество рёбер
 var edgeSubset:pointEdgeSet;
 begin
     new(edgeSubset);
@@ -44,17 +44,17 @@ begin
     edgeSubsetHead:=edgeSubset;
 end;
 
-Procedure copyEdgeToSet(edge:pointEdge);
+Procedure copyEdgeToSet(edge:pointEdge);//создание нового списка рёбер из указателя полученного от прежнего списка
 var metk:pointEdge;
 begin
     metk:=edge^.next;
     While metk<>edge do begin
-        addEdgeSet(metk);
+        addEdgeSet(metk);//добвление ребра из списка в множество рёбер
         metk:=metk^.next;
     end;
 end;
 
-Function pop(edgeSet:pointEdgeSet):pointEdgeSet;
+Function pop(edgeSet:pointEdgeSet):pointEdgeSet;//получение (и дальнейшее удаление) из множества рёбер указателя на ребро
 var x:pointEdgeSet;
     metk:pointEdgeSet;
 begin
@@ -67,7 +67,7 @@ begin
     pop:=x;
 end;
 
-Function getNearEdge(edgeSet:pointEdgeSet):pointEdgeSet;
+Function getNearEdge(edgeSet:pointEdgeSet):pointEdgeSet;//получение указателя на соседнее ребро
 var metk:pointEdgeSet;
     x:pointEdgeSet;
 begin
@@ -81,15 +81,15 @@ begin
     getNearEdge:=x;
 end;
 
-Procedure createSubset();
+Procedure createSubset();//создание максимального подмножества
 var x:pointEdgeSet;
     metk:pointEdgeSet;
 begin
-    x:=pop(edgeSetHead^.next);
-    addEdgeSubset(x);
+    x:=pop(edgeSetHead^.next);//получение (и дальнейшее удаление) из множества рёбер указателя на ребро
+    addEdgeSubset(x);//дабвление указателя в подмножество рёбер
     metk:=edgeSubsetHead^.next;
     While metk<>edgeSubsetHead do begin
-        x:=getNearEdge(metk);
+        x:=getNearEdge(metk);//получение указателя на соседнее ребро
         While x<>nil do begin
             x:=pop(x);
             addEdgeSubset(x);
@@ -99,11 +99,11 @@ begin
     end;
 end;
 
-Function getEdgeSubsetHead():pointEdgeSet;
+Function getEdgeSubsetHead():pointEdgeSet;//возврат указателя начала подмножества рёбер
 begin
     getEdgeSubsetHead:=edgeSubsetHead;
 end;
 
 Initialization
-    initEdgeSet();
+    initEdgeSet();//инициализация множества и подмножества
 End.

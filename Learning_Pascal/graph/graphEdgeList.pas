@@ -14,13 +14,13 @@ Implementation
 
 Var edgeHead: pointEdge;
 
-Procedure initEdge();
+Procedure initEdge();//инициализация списка
 begin
     new(edgeHead);
     edgeHead^.next:=edgeHead;
 end;
 
-Procedure addEdge(ID_one:node_ID; ID_two:node_ID);
+Procedure addEdge(ID_one:node_ID; ID_two:node_ID);//добвление ребра в список рёбер
 var edge:pointEdge;
 begin
     new(edge);
@@ -32,7 +32,7 @@ begin
     edgeHead:=edge;
 end;
 
-Function isExistEdge(ID_one:node_ID; ID_two:node_ID):boolean;
+Function isExistEdge(ID_one:node_ID; ID_two:node_ID):boolean;//проверка на существование данного ребра в списке рёбер
 var metk: pointEdge;
     f:boolean;
 begin
@@ -45,7 +45,7 @@ begin
     isExistEdge:=f;
 end;
 
-Procedure setCount();
+Procedure setCount();//установление количества соседних рёбер, по которому будут сортировываться рёбра
 var edgeSort: pointEdge;
     edge: pointEdge;
 begin
@@ -62,7 +62,7 @@ begin
     end;
 end;
 
-Function getMaxCountPoint(metk:pointEdge):pointEdge;
+Function getMaxCountPoint(metk:pointEdge):pointEdge;//получение указателя на максимального из оставшихся элементов
 var count:integer;
     maxPoint:pointEdge;
 begin
@@ -78,7 +78,7 @@ begin
     getMaxCountPoint:=maxPoint;
 end;
 
-Procedure exchangeDates(var edgeOne:pointEdge; var edgeTwo:pointEdge);
+Procedure exchangeDates(var edgeOne:pointEdge; var edgeTwo:pointEdge);//обмен значениями
 var x:node_ID;
     y:integer;
 begin
@@ -93,24 +93,24 @@ begin
     edgeTwo^.count:=y;
 end;
 
-Procedure sortByCount();
+Procedure sortByCount();//сортировка нахождением максимального из элементов
 var metk:pointEdge;
     maxCountPoint:pointEdge;
 begin
     metk:=edgeHead^.next;
     maxCountPoint:=nil;
     While metk<>edgeHead do begin
-        maxCountPoint:=getMaxCountPoint(metk);
-        exchangeDates(maxCountPoint,metk);
+        maxCountPoint:=getMaxCountPoint(metk);//получение указателя на максимального из оставшихся элементов
+        exchangeDates(maxCountPoint,metk);//обмен значениями
         metk:=metk^.next;
     end;
 end;
 
-Function getEdgeHead():pointEdge;
+Function getEdgeHead():pointEdge;//возвращение указателя начала списка
 begin
     getEdgeHead:=edgeHead;
 end;
 
 Initialization
-    initEdge();
+    initEdge();//инициализация списка
 End.
