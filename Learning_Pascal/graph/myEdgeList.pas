@@ -13,33 +13,33 @@ Type pointList = ^edgeList;
 
 Var pListHead: pointList;
 
-Function getNewPointList():pointList;
-Procedure addPointInTail(var pList: pointList; metk: pointList);
-Procedure fillList(var pList:pointList; FILE_NAME: string);
-Procedure setMetk(var pList: pointList);
-Procedure setCountNearEdges(var pList: pointList);
-Function isExistNotMetk(pList: pointList):boolean;
-Function isExistMetkPoint(pList: pointList):boolean;
-Function getNearNotMetkEdge(pList: pointList; edge:pointList):pointList;
-Procedure sortEdgesByCountFromMinToMax(var pList: pointList);
-Procedure sortEdgesByCountFromMaxToMin(var pList: pointList);
-Procedure printList(pList: pointList; FILE_NAME:string);
+Function getNewPointList():pointList;//создание нового указателя-начала списка
+Procedure addPointInTail(var pList: pointList; metk: pointList);//добавление указателя в конец списка
+Procedure fillList(var pList:pointList; FILE_NAME: string);//заполнение списка данными из файла
+Procedure setMetk(var pList: pointList);//отмечаем ребро как пройденное
+Procedure setCountNearEdges(var pList: pointList);//нахождение количества соседних рёбер у данного ребра
+Function isExistNotMetk(pList: pointList):boolean;//проверка на существование непройденных рёбер
+Function isExistMetkPoint(pList: pointList):boolean;//проверка на непройденость ребра
+Function getNearNotMetkEdge(pList: pointList; edge:pointList):pointList;//получение указателя на соседнее непройденное ребро
+Procedure sortEdgesByCountFromMinToMax(var pList: pointList);//сортировка рёбер по возрастанию количества соседних рёбер
+Procedure sortEdgesByCountFromMaxToMin(var pList: pointList);//сортировка рёбер по убыванию количества соседних рёбер
+Procedure printList(pList: pointList; FILE_NAME:string);//вывод списка рёбер в файл
 
 Implementation
 
-Procedure initList(var pList: pointList);
+Procedure initList(var pList: pointList);//инициализация указателя
 begin
     new(pList);
     pList^.next:=pList;
 end;
 
-Function getNewPointList():pointList;
+Function getNewPointList():pointList;//создание нового указателя-начала списка
 begin
     initList(pListHead);
     getNewPointList:=pListHead;
 end;
 
-Procedure addTail(var pList: pointList; nodeOneID: string; nodeTwoID: string);
+Procedure addTail(var pList: pointList; nodeOneID: string; nodeTwoID: string);//добавление элемента в конец списка
 var y: pointList;
 begin
     new(y);
@@ -52,7 +52,7 @@ begin
     pList:=y;
 end;
 
-Function getLastPoint(pList: pointList):pointList;
+Function getLastPoint(pList: pointList):pointList;//получение последнего (не считая "болванчика") указателя списка
 var metk:pointList;
 begin
     metk:=pList^.next;
@@ -61,7 +61,7 @@ begin
     getLastPoint:=metk;
 end;
 
-Procedure copyPointDates(var pList: pointList; metk: pointList);
+Procedure copyPointDates(var pList: pointList; metk: pointList);//копирование данных одного указателя другим
 begin
     pList^.nodeOneID:=metk^.nodeOneID;
     pList^.nodeTwoID:=metk^.nodeTwoID;
@@ -69,7 +69,7 @@ begin
     pList^.isMetk:=metk^.isMetk;
 end;
 
-Procedure addPointInTail(var pList: pointList; metk: pointList);
+Procedure addPointInTail(var pList: pointList; metk: pointList);//добавление указателя в конец списка
 var lastPoint:pointList;
 begin
     addTail(pList, metk^.nodeOneID, metk^.nodeTwoID);
@@ -77,7 +77,7 @@ begin
     copyPointDates(lastPoint, metk);
 end;
 
-Procedure getParseStr(str: string; var stringOne: string; var stringTwo: string);
+Procedure getParseStr(str: string; var stringOne: string; var stringTwo: string);//парсинг строки в соответствии с задачей
 
 const SPACE = ' ';
 
@@ -93,7 +93,7 @@ begin
     stringTwo:=copy(str, i+1, length(str)-i);
 end;
 
-Procedure fillList(var pList:pointList; FILE_NAME: string);
+Procedure fillList(var pList:pointList; FILE_NAME: string);//заполнение списка данными из файла
 var f:text;
     str: string;
     nodeOneID: string;
@@ -109,18 +109,18 @@ begin
     Close(f);
 end;
 
-Procedure setMetk(var pList: pointList);
+Procedure setMetk(var pList: pointList);//отмечаем ребро как пройденное
 begin
     pList^.isMetk:=true;
 end;
 
-Function isNearEdges(edgeOne: pointList; edgeTwo: pointList):boolean;
+Function isNearEdges(edgeOne: pointList; edgeTwo: pointList):boolean;//проверка - являются ли два ребра соседними
 begin
     isNearEdges:=(edgeOne<>edgeTwo) and ((edgeOne^.nodeOneID=edgeTwo^.nodeOneID)or(edgeOne^.nodeOneID=edgeTwo^.nodeTwoID)
     or(edgeOne^.nodeTwoID=edgeTwo^.nodeOneID)or(edgeOne^.nodeTwoID=edgeTwo^.nodeTwoID));
 end;
 
-Procedure setCountNearEdges(var pList: pointList);
+Procedure setCountNearEdges(var pList: pointList);//нахождение количества соседних рёбер у данного ребра
 var metkOne:pointList;
     metkTwo:pointList;
 begin
@@ -138,12 +138,12 @@ begin
     end;
 end;
 
-Function isLess(edgeOne: pointList; edgeTwo: pointList):boolean;
+Function isLess(edgeOne: pointList; edgeTwo: pointList):boolean;//проверка - является ли один элемент списка меньше другого (сравнение по количеству соседних рёбер)
 begin
     isLess:=edgeOne^.countNearEdges<edgeTwo^.countNearEdges;
 end;
 
-Function isExistNotMetk(pList: pointList):boolean;
+Function isExistNotMetk(pList: pointList):boolean;//проверка на существование непройденных рёбер
 var metk:pointList;
     f:boolean;
 begin
@@ -156,12 +156,12 @@ begin
     isExistNotMetk:=f;
 end;
 
-Function isExistMetkPoint(pList: pointList):boolean;
+Function isExistMetkPoint(pList: pointList):boolean;//проверка на непройденость ребра
 begin
     isExistMetkPoint:=pList^.isMetk;
 end;
 
-Function getNearNotMetkEdge(pList: pointList; edge:pointList):pointList;
+Function getNearNotMetkEdge(pList: pointList; edge:pointList):pointList;//получение указателя на соседнее непройденное ребро
 var metk:pointList;
     f:boolean;
 begin
@@ -176,7 +176,7 @@ begin
     getNearNotMetkEdge:=metk;
 end;
 
-Procedure exchangePointDates(var pListOne: pointList; var pListTwo: pointList);
+Procedure exchangePointDates(var pListOne: pointList; var pListTwo: pointList);//обмен данных между двумя элементами списка
 var metk:pointList;
 begin
     new(metk);
@@ -195,7 +195,7 @@ begin
     dispose(metk);
 end;
 
-Procedure sortEdgesByCountFromMinToMax(var pList: pointList);
+Procedure sortEdgesByCountFromMinToMax(var pList: pointList);//сортировка рёбер по возрастанию количества соседних рёбер
 var metk:pointList;
     lastMetk:pointList;
     f:boolean;
@@ -217,7 +217,7 @@ begin
     end;
 end;
 
-Procedure sortEdgesByCountFromMaxToMin(var pList: pointList);
+Procedure sortEdgesByCountFromMaxToMin(var pList: pointList);//сортировка рёбер по убыванию количества соседних рёбер
 var metk:pointList;
     lastMetk:pointList;
     f:boolean;
@@ -239,7 +239,7 @@ begin
     end;
 end;
 
-Procedure printList(pList: pointList; FILE_NAME:string);
+Procedure printList(pList: pointList; FILE_NAME:string);//вывод списка рёбер в файл
 var f:text;
     metk:pointList;
 begin
